@@ -1,12 +1,17 @@
-import { ApplicationConfig } from '@angular/core';
-import { provideRouter } from '@angular/router';
-
-import { routes } from './app.routes';
-import { provideClientHydration } from '@angular/platform-browser';
-import { CoreModule } from './core/core.module';
-import { provideStore } from '@ngrx/store';
-import { provideEffects } from '@ngrx/effects';
+import { ApplicationConfig } from '@angular/core'
+import {
+  PreloadAllModules,
+  provideRouter,
+  withPreloading,
+} from '@angular/router'
+import { provideClientHydration } from '@angular/platform-browser'
+import { provideHttpClient, withFetch } from '@angular/common/http'
+import { APP_ROUTES } from './app.routes'
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideClientHydration(), provideStore(), provideEffects()]
-};
+  providers: [
+    provideRouter(APP_ROUTES, withPreloading(PreloadAllModules)),
+    provideHttpClient(withFetch()),
+    provideClientHydration(),
+  ],
+}
