@@ -1,0 +1,6 @@
+@if (postStore.postList().length) {
+  {{ postStore.postList() | json }}
+}
+<div>ENTITY</div>
+
+<button (click)="postStore.getPosts()">GET POSTS</button>

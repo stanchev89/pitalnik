@@ -1,0 +1,13 @@
+<button (click)="postStore.getPosts()">Get Posts</button>
+@if (hideList) {
+  <button (click)="hideList = !hideList">Show List</button>
+} @else {
+  <button (click)="hideList = !hideList">Hide List</button>
+}
+<a [routerLink]="['entity']">Go to entity</a>
+
+@if (postStore.isLoading()) {
+  <p>Loading...</p>
+} @else if (postStore.postList().length && !hideList) {
+  <p>{{ postStore.postList() | json }}</p>
+}
