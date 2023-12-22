@@ -21,12 +21,11 @@ export class AuthService {
       .findOne({ username })
       .then((user) => {
         if (!user) {
-          throw new NotAcceptableException('Wrong customer credentials.');
+          throw new NotAcceptableException(ERROR_CODE.WRONG_CUSTOMER_CREDENTIALS);
         }
         return Promise.all([user, bcrypt.compare(password, user.password)]);
       })
-      .then(([user, isValidPassword]) => (isValidPassword ? user : null))
-      .catch(() => null);
+      .then(([user, isValidPassword]) => (isValidPassword ? user : null));
   }
 
   login(user: IUser): { user: IUser; [ACCESS_TOKEN]: string; refreshToken: string } {
