@@ -14,12 +14,12 @@ import {
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Request, Response } from 'express';
-import { ICreateUser, IUser } from '../interfaces/entity/user.interface';
+import { ICreateUser, IUser } from '../../interfaces/entity/user.interface';
 import { UserService } from '../user/user.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { ACCESS_TOKEN } from '../constants/auth-token';
+import { ACCESS_TOKEN } from '../../constants/auth-token';
 import { JwtService } from '@nestjs/jwt';
-import { ERROR_CODE } from '../enums/error-code';
+import { ERROR_CODE } from '../../enums/error-code';
 
 @Controller()
 export class AuthController {

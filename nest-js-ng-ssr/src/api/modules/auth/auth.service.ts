@@ -3,11 +3,11 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { User } from '../user/user.entity';
 import * as bcrypt from 'bcrypt';
-import { ACCESS_TOKEN } from '../constants/auth-token';
-import { IUser } from '../interfaces/entity/user.interface';
-import { IJwtRefreshTokenPayload, IJwtTokenPayload } from '../interfaces/jwt';
-import configuration from '../../../config/configuration';
-import { ERROR_CODE } from '../enums/error-code';
+import { ACCESS_TOKEN } from '../../constants/auth-token';
+import { IUser } from '../../interfaces/entity/user.interface';
+import { IJwtRefreshTokenPayload, IJwtTokenPayload } from '../../interfaces/jwt';
+import configuration from '../../../../config/configuration';
+import { ERROR_CODE } from '../../enums/error-code';
 
 @Injectable()
 export class AuthService {

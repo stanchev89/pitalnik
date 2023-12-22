@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { AuthService } from '../auth.service';
 import { Strategy } from 'passport-jwt';
-import configuration from '../../../../config/configuration';
+import configuration from '../../../../../config/configuration';
 import { Request } from 'express';
-import { ACCESS_TOKEN } from '../../constants/auth-token';
+import { ACCESS_TOKEN } from '../../../constants/auth-token';
 import { JwtService } from '@nestjs/jwt';
-import { IUser } from '../../interfaces/entity/user.interface';
+import { IUser } from '../../../interfaces/entity/user.interface';
 import { UserService } from '../../user/user.service';
-import { IJwtTokenPayload } from '../../interfaces/jwt';
+import { IJwtTokenPayload } from '../../../interfaces/jwt';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {

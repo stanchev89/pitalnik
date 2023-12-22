@@ -1,6 +1,6 @@
 import common_1, { ExecutionContext, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { TOKEN_EXPIRED_ERROR, TOKEN_EXPIRED_RESPONSE_MSG } from '../../constants/jwt.const';
+import { TOKEN_EXPIRED_ERROR, TOKEN_EXPIRED_RESPONSE_MSG } from '../../../constants/jwt.const';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {

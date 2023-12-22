@@ -2,8 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository, UpdateResult } from 'typeorm';
-import { ICreateUser, IUser } from '../interfaces/entity/user.interface';
-import { ERROR_CODE } from '../enums/error-code';
+import { ICreateUser, IUser } from '../../interfaces/entity/user.interface';
+import { ERROR_CODE } from '../../enums/error-code';
 
 @Injectable()
 export class UserService {

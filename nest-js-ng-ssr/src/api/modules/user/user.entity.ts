@@ -9,7 +9,7 @@ import {
   UpdateDateColumn
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import configuration from '../../../config/configuration';
+import configuration from '../../../../config/configuration';
 
 @Entity()
 export class User {
