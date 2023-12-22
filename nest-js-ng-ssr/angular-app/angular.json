@@ -24,7 +24,12 @@
               "zone.js"
             ],
             "externalDependencies": [
-              "@nestjs/*"
+              "@nestjs/*",
+              "bcrypt",
+              "cookie-parser",
+              "passport-local",
+              "@mapbox/*",
+              "typeorm"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",

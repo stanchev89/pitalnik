@@ -1,9 +1,9 @@
 <app-header></app-header>
 <router-outlet></router-outlet>
 @defer {
-  <div>
-    <button (click)="testStore.increment()">app increment</button>
-    <p>app counter: {{ testStore.count() }}</p>
-  </div>
-  <a routerLink="/post">posts</a>
+    <div>
+        <button (click)="testStore.increment()">app increment</button>
+        <p>app counter: {{ testStore.count() }}</p>
+    </div>
+    <a routerLink="/post">posts</a>
 }
