@@ -7,7 +7,7 @@ import { ACCESS_TOKEN } from '../../constants/auth-token';
 import { IUser } from '../../interfaces/entity/user.interface';
 import { IJwtRefreshTokenPayload, IJwtTokenPayload } from '../../interfaces/jwt';
 import configuration from '../../../../config/configuration';
-import { ERROR_CODE } from '../../enums/error-code';
+import { ERROR_CODE } from '../../enums/error-code.enum';
 
 @Injectable()
 export class AuthService {

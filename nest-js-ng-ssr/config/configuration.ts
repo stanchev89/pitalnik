@@ -1,7 +1,7 @@
 export default () => ({
   port: 4000,
   database: {
-    name: 'pi-db-dev',
+    name: 'pi_db_dev',
     type: 'postgres',
     host: 'localhost',
     port: 5432,

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository, UpdateResult } from 'typeorm';
 import { ICreateUser, IUser } from '../../interfaces/entity/user.interface';
-import { ERROR_CODE } from '../../enums/error-code';
+import { ERROR_CODE } from '../../enums/error-code.enum';
 
 @Injectable()
 export class UserService {
@@ -28,7 +28,7 @@ export class UserService {
   }
 
   updateOne(payload: Partial<User>): Promise<UpdateResult> {
-    return this.userRepository.update({ username: payload.username }, payload);
+    return this.userRepository.update({ id: payload.id }, payload);
   }
 
   async remove(id: number): Promise<void> {

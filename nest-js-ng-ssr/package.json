@@ -9,7 +9,7 @@
     "ng": "ng",
     "start-fe": "cd angular-app && ng serve",
     "build-fe": "cd angular-app && ng build",
-    "watch-fe": "cd angular-app && ng build --watch --configuration development",
+    "watch-fe": "cd angular-app && ng build --watch --configuration production",
     "test-fe": "cd angular-app && ng test",
     "serve:ssr": "nodemon dist/angular-app/server/server.mjs",
     "watch:ssr": "nodemon --watch angular-app/src/ -e ts,html,scss --exec 'npm run serve:ssr'",
@@ -27,7 +27,12 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "typeorm-cli": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "typeorm": "npx typeorm -d dist/src/api/data-source.js",
+    "migration:generate": "npm run typeorm -- migration:generate",
+    "migration:run": "npm run typeorm -- migration:run",
+    "migration:revert": "npm run typeorm -- migration:revert"
   },
   "dependencies": {
     "@angular/animations": "^17.0.0",
@@ -99,7 +104,7 @@
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.3",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "~5.2.2"
   },

@@ -19,7 +19,7 @@ import { UserService } from '../user/user.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { ACCESS_TOKEN } from '../../constants/auth-token';
 import { JwtService } from '@nestjs/jwt';
-import { ERROR_CODE } from '../../enums/error-code';
+import { ERROR_CODE } from '../../enums/error-code.enum';
 
 @Controller()
 export class AuthController {
