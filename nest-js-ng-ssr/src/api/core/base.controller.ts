@@ -5,23 +5,37 @@ import { CustomAfterQueryHandler, PlugAfterQuery } from '../types/plug-after-que
 import { AllowedControllerQueries } from '../types/allowed-controller-queries.type';
 import { CRUD } from '../enums/crud.enum';
 import { BasePath } from '../enums/base-path.enum';
-import { Delete, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Put, Req, Res } from '@nestjs/common';
+import {
+  Delete,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Req,
+  Res,
+  UseGuards
+} from '@nestjs/common';
 import { ERROR_CODE } from '../enums/error-code.enum';
 import { IBaseEntity } from '../interfaces/entity/base-entity.interface';
 import { Request, Response } from 'express';
 import { enrichReqWithQueryParams } from '../shared/helpers/enrich-req-with-query-params';
 import { PAGINATION, QueryClause } from '../enums/query-clause.enum';
+import { JwtAuthGuard } from '../modules/auth/guards/jwt-auth.guard';
 
 export abstract class BaseController<T extends IBaseEntity> {
   protected abstract readonly repository: Repository<T>;
   protected abstract readonly availablePaths: Partial<AllowedControllerQueries>;
   protected abstract readonly allowedQueryFields: IAllowedQueryFields<T>;
 
-  protected plugBeforeQuery: Partial<PlugBeforeQuery> = {} as PlugBeforeQuery;
-  protected plugAfterQuery: Partial<PlugAfterQuery> = {} as PlugAfterQuery;
+  protected plugBeforeQuery: Partial<PlugBeforeQuery> = {};
+  protected plugAfterQuery: Partial<PlugAfterQuery> = {};
 
-  constructor() {}
+  protected constructor() {}
 
+  @UseGuards(JwtAuthGuard)
   @Delete(BasePath.ENTITY)
   deleteEntity(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     if (!this.isAvailablePath(CRUD.DELETE, BasePath.ENTITY)) {
@@ -29,17 +43,20 @@ export abstract class BaseController<T extends IBaseEntity> {
     return this.handleRequest(req, res, BasePath.ENTITY, () => this.repository.delete(req[QueryClause.WHERE]));
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(BasePath.ENTITY)
   putEntity(@Req() req: Request, @Res({ passthrough: true }) res: Response, @Param('id', ParseIntPipe) id: number) {
     if (!this.isAvailablePath(CRUD.PUT, BasePath.ENTITY)) {
       this.throwNotFoundException();
     }
-
     return this.handleRequest(req, res, BasePath.ENTITY, () =>
-      this.repository.update({ id } as FindOptionsWhere<any>, req.body)
+      this.repository
+        .update({ id } as FindOptionsWhere<any>, req.body)
+        .then(() => this.repository.findOne(this.getFindOneClauses(req, id)))
     );
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post(BasePath.SLASH)
   post(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     if (!this.isAvailablePath(CRUD.POST, BasePath.SLASH)) {
@@ -51,6 +68,7 @@ export abstract class BaseController<T extends IBaseEntity> {
     });
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post(BasePath.ENTITY)
   postEntity(@Req() req: Request, @Res({ passthrough: true }) res: Response, @Param('id', ParseIntPipe) id: number) {
     if (!this.isAvailablePath(CRUD.POST, BasePath.ENTITY)) {

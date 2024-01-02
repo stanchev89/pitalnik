@@ -3,6 +3,7 @@ import {
   FindOptionsRelations,
   FindOptionsWhere,
   ILike,
+  IsNull,
   LessThan,
   LessThanOrEqual,
   Like,
@@ -20,7 +21,8 @@ const QUERY_OPERATORS = {
   mte: MoreThanOrEqual,
   eq: Equal,
   like: Like,
-  iLike: ILike
+  iLike: ILike,
+  nonull: () => Not(IsNull())
 };
 
 const parseRawWhereValue = (where: string): boolean | number | string => {
@@ -31,6 +33,8 @@ const parseRawWhereValue = (where: string): boolean | number | string => {
       return true;
     case 'false':
       return false;
+    case 'null':
+      return null;
     default:
       return where.startsWith('@') ? Number(where.slice(1)) : where;
   }
@@ -40,31 +44,33 @@ const convertParamsToObj = (
   query: string,
   allowedFields: string[]
 ): FindOptionsRelations<any> | FindOptionsWhere<any> => {
-  // Example of a query: ?where= "post,comment$text=true$test=false$shorthand$name=Stefan&num=@5,age|mte=@10"
-  // Results in: { post: true, comment: { text: true, test: false, shorthand: true }, name: 'Stefan', num: 5, age: MoreThanOrEqual(10)  }
+  // Example of ?where= query: "post,id=22,comment$text=true$test=false$shorthand$name=Stefan&num=@5,age|mte=@10"
+  // Results in: { post: true, id: 22, comment: { text: true, test: false, shorthand: true }, name: 'Stefan', num: 5, age: MoreThanOrEqual(10)  }
   const conditions = query.split(',');
   return conditions.reduce((acc, cur) => {
-    const [parentKey, ...whereArr] = cur.split('$');
+    const [rawParentKey, ...nestWhere] = cur.split('$');
+    const [parentKeyWithOperator, equal] = rawParentKey.split('=');
+    const [parentKey, operator] = parentKeyWithOperator.split('|');
+
     if (allowedFields.length && !allowedFields.includes(parentKey)) {
       return acc;
     }
-    // Shorthand
-    if (!whereArr.length) {
-      acc[parentKey] = true;
+    if (!nestWhere.length) {
+      acc[parentKey] =
+        operator && QUERY_OPERATORS[operator]
+          ? QUERY_OPERATORS[operator](parseRawWhereValue(equal))
+          : parseRawWhereValue(equal) || true;
       return acc;
     }
-    // Parse where conditions
-    const whereObj = whereArr.reduce((obj, where) => {
+
+    // Parse nested where conditions
+    const nestWhereObj = nestWhere.reduce((obj, where) => {
       const [rawKey, value] = where.split('=');
-      const [key, operator] = rawKey.split('|');
-      if (operator && QUERY_OPERATORS[operator]) {
-        obj[key] = QUERY_OPERATORS[operator](parseRawWhereValue(value));
-        return obj;
-      }
-      obj[key] = parseRawWhereValue(value);
+      const [key, op] = rawKey.split('|');
+      obj[key] = op && QUERY_OPERATORS[op] ? QUERY_OPERATORS[op](parseRawWhereValue(value)) : parseRawWhereValue(value);
       return obj;
     }, {});
-    acc[parentKey] = whereObj;
+    acc[parentKey] = nestWhereObj;
     return acc;
   }, {});
 };

@@ -10,8 +10,7 @@ export const dataSourceOptions: DataSourceOptions = {
   username: dbConfig.username,
   password: dbConfig.password,
   database: dbConfig.name,
-  synchronize: true,
-  logging: true
+  synchronize: true
 };
 
 const dataSource = new DataSource(dataSourceOptions);

@@ -4,4 +4,6 @@ import { BasePath } from '../enums/base-path.enum';
 
 export type CustomBeforeQueryHandler = (req: Request) => Promise<any>;
 
-export type PlugBeforeQuery = { [key in Partial<CRUD>]: { [key in Partial<BasePath>]: CustomBeforeQueryHandler } };
+export type PlugBeforeQuery = {
+  [key in Partial<CRUD>]: Partial<{ [key in Partial<BasePath>]: CustomBeforeQueryHandler }>;
+};

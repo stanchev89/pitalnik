@@ -8,24 +8,34 @@ import { IAllowedQueryFields } from '../../interfaces/allowed-query-fields';
 import { CRUD } from '../../enums/crud.enum';
 import { BasePath } from '../../enums/base-path.enum';
 
-const allowedWhereQueryFields: (keyof IPost)[] = ['title', 'text', 'id'];
+const allowedWhereQueryFields: (keyof IPost)[] = ['title', 'text', 'id', 'user'];
+const allowedRelations = ['user'];
 
 @Controller()
 export class PostController extends BaseController<IPost> {
   allowedQueryFields: IAllowedQueryFields<IPost> = {
     where: allowedWhereQueryFields,
-    relations: ['comment'],
+    relations: allowedRelations,
     order: allowedWhereQueryFields
   };
 
   repository = this.postRepository;
 
-  availablePaths = { [CRUD.POST]: [BasePath.SLASH, BasePath.ENTITY], [CRUD.GET]: [BasePath.SLASH, BasePath.ENTITY] };
-  override plugAfterQuery = {
-    [CRUD.GET]: {
-      [BasePath.SLASH]: (req, res) => {
-        console.log(res.locals);
-        return Promise.resolve(res.locals);
+  availablePaths = {
+    [CRUD.POST]: [BasePath.SLASH, BasePath.ENTITY],
+    [CRUD.PUT]: [BasePath.ENTITY],
+    [CRUD.GET]: [BasePath.SLASH, BasePath.ENTITY]
+  };
+
+  override plugBeforeQuery = {
+    [CRUD.POST]: {
+      [BasePath.SLASH]: (req) => {
+        req.body.user = req.user;
+        return Promise.resolve(req);
+      },
+      [BasePath.ENTITY]: (req) => {
+        req.body.user = req.user;
+        return Promise.resolve(req);
       }
     }
   };
